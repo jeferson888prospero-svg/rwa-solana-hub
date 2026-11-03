@@ -21,7 +21,7 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-purple-500 selection:text-white relative">
 
-  <!-- Efectos de luz ambiental de fondo -->
+  <!-- Fondo ambiental -->
   <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[350px] bg-gradient-to-tr from-purple-900/20 via-indigo-600/10 to-transparent blur-[120px] pointer-events-none"></div>
 
   <!-- TOP BAR -->
@@ -52,7 +52,7 @@
   <!-- MAIN CONTENT -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full space-y-12 relative z-10">
     
-    <!-- HERO / MANIFIESTO DEL CREADOR -->
+    <!-- HERO / MANIFIESTO -->
     <div class="glass p-8 sm:p-14 rounded-3xl glow-card border border-purple-500/25 relative overflow-hidden text-center max-w-4xl mx-auto">
       <div class="absolute -top-32 -left-32 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -92,15 +92,15 @@
       </div>
     </div>
 
-    <!-- FORM MODULE MULTI-EMPRESA DINÁMICO -->
+    <!-- FORM MODULE MULTI-EMPRESA TOTALMENTE EDITABLE -->
     <div class="glass p-8 sm:p-12 rounded-3xl glow-card border border-purple-500/20 max-w-3xl mx-auto relative">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
           <h3 class="text-2xl font-bold text-white tracking-tight">Emisión de Activos RWA</h3>
-          <p class="text-sm text-gray-400 mt-1">Configuración del emisor corporativo y tasación inmutable en Solana Mainnet.</p>
+          <p class="text-sm text-gray-400 mt-1">Configuración abierta para emisores corporativos en Solana Mainnet.</p>
         </div>
         <div class="bg-purple-950/50 border border-purple-500/30 px-3.5 py-1.5 rounded-xl text-xs font-mono text-purple-300">
-          Modo Institucional Activo
+          Modo Multiempresa Activo
         </div>
       </div>
 
@@ -117,28 +117,40 @@
           </div>
         </div>
 
+        <!-- FILA 1 EMPRESA: NOMBRE DE LA ENTIDAD Y RIF -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <!-- RIF DINÁMICO -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-purple-300 mb-2">RIF DE LA EMPRESA EMISORA</label>
-            <input type="text" id="companyRif" required placeholder="Ej. J-12345678-9" oninput="updatePreview()" class="w-full glass-input rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm font-mono transition-all">
+            <label class="block text-xs font-bold uppercase tracking-wider text-purple-300 mb-2">ENTIDAD EMISORA / RAZÓN SOCIAL</label>
+            <input type="text" id="companyName" required placeholder="Ej. Inversiones Globales C.A." oninput="updatePreview()" class="w-full glass-input rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm transition-all">
           </div>
-          <!-- PRESIDENTE / DUEÑO DINÁMICO -->
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-purple-300 mb-2">PRESIDENTE / DUEÑO / CEO</label>
-            <input type="text" id="companyOwner" required placeholder="Ej. Ing. Carlos Mendoza" oninput="updatePreview()" class="w-full glass-input rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm transition-all">
+            <label class="block text-xs font-bold uppercase tracking-wider text-purple-300 mb-2">RIF DE LA EMPRESA</label>
+            <input type="text" id="companyRif" required placeholder="Ej. J-12345678-9" oninput="updatePreview()" class="w-full glass-input rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm font-mono transition-all">
           </div>
         </div>
 
-        <!-- TARJETA DE VISTA PREVIA EN VIVO DEL CERTIFICADO -->
+        <!-- FILA 2 EMPRESA: PRESIDENTE Y FIRMA -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-purple-300 mb-2">PRESIDENTE / CEO / DUEÑO</label>
+            <input type="text" id="companyOwner" required placeholder="Ej. Ing. Carlos Mendoza" oninput="updatePreview()" class="w-full glass-input rounded-xl px-4 py-3.5 text-white placeholder-gray-500 text-sm transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-gray-300 mb-2">FIRMA CRIPTOGRÁFICA DE INGENIERÍA</label>
+            <input type="text" readonly value="JLC7289-RWA-SOLANA-SECURE" class="w-full bg-gray-900/50 border border-gray-800 rounded-xl px-4 py-3.5 text-xs font-mono text-purple-400 select-all cursor-not-allowed">
+          </div>
+        </div>
+
+        <!-- TARJETA DE VISTA PREVIA EN VIVO -->
         <div class="bg-purple-950/20 border border-purple-500/30 rounded-2xl p-5 space-y-3 font-mono text-xs">
           <div class="flex justify-between text-purple-300 border-b border-purple-900/50 pb-2">
             <span>PREVIEW CERTIFICADO RWA ON-CHAIN</span>
-            <span id="previewStatus" class="text-amber-400">PENDIENTE DE EMISIÓN</span>
+            <span id="previewStatus" class="text-amber-400">PENDIENTE DE DATOS</span>
           </div>
-          <div class="grid grid-cols-2 gap-2 text-gray-300">
-            <div><span class="text-gray-500">Emisor:</span> <span id="prevRif" class="text-white">---</span></div>
-            <div><span class="text-gray-500">Directiva:</span> <span id="prevOwner" class="text-white">---</span></div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-gray-300">
+            <div><span class="text-gray-500 block">Entidad:</span> <span id="prevEntity" class="text-white font-bold">---</span></div>
+            <div><span class="text-gray-500 block">RIF:</span> <span id="prevRif" class="text-white font-bold">---</span></div>
+            <div><span class="text-gray-500 block">CEO/Dueño:</span> <span id="prevOwner" class="text-white font-bold">---</span></div>
           </div>
         </div>
 
@@ -183,11 +195,15 @@
     }
 
     function updatePreview() {
+      const entity = document.getElementById('companyName').value || '---';
       const rif = document.getElementById('companyRif').value || '---';
       const owner = document.getElementById('companyOwner').value || '---';
+      
+      document.getElementById('prevEntity').innerText = entity;
       document.getElementById('prevRif').innerText = rif;
       document.getElementById('prevOwner').innerText = owner;
-      if(rif !== '---' && owner !== '---') {
+
+      if(entity !== '---' && rif !== '---' && owner !== '---') {
         document.getElementById('previewStatus').innerText = 'LISTO PARA MINTEAR';
         document.getElementById('previewStatus').className = 'text-emerald-400';
       }
@@ -215,14 +231,15 @@
       e.preventDefault();
       const asset = document.getElementById('assetName').value;
       const value = document.getElementById('assetValue').value;
+      const companyName = document.getElementById('companyName').value;
       const companyRif = document.getElementById('companyRif').value;
       const companyOwner = document.getElementById('companyOwner').value;
       const fee = (value * 0.03).toFixed(2);
 
-      showToast('Ejecutando Smart Contract', `Tokenizando ${asset} | RIF: ${companyRif} (${companyOwner})...`);
+      showToast('Ejecutando Smart Contract', `Tokenizando ${asset} para ${companyName} (${companyRif}) dirigida por ${companyOwner}...`);
 
       setTimeout(() => {
-        showToast('Éxito - Tokenización JLC7289', `Activo emitido inmutablemente en Solana. Comisión $${fee} USD enrutada.`);
+        showToast('Éxito - Tokenización JLC7289', `Certificado emitido para ${companyName}. Comisión $${fee} USD enrutada a Tesorería.`);
       }, 2500);
     }
 
